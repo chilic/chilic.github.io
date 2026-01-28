@@ -1,0 +1,227 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1.0" name=viewport><title>Docker Anti-Patterns: How Not to Build Production Containers | How Not To Dev</title><meta content="Docker Anti-Patterns: How Not to Build Production Containers | How Not To Dev" name=title><meta content="The worst Docker mistakes in production — bloated images, running as root, no health checks, secrets baked into layers. A catalog of container anti-patterns." name=description><meta content="How Not To Dev" name=author><meta content="index, follow" name=robots><link href=https://hownotto.dev/blog/docker-best-practices/ rel=canonical><meta content=article property=og:type><meta content=https://hownotto.dev/blog/docker-best-practices/ property=og:url><meta content="Docker Anti-Patterns: How Not to Build Production Containers" property=og:title><meta content="The worst Docker mistakes in production — bloated images, running as root, no health checks, secrets baked into layers. A catalog of container anti-patterns." property=og:description><meta content="How Not To Dev" property=og:site_name><meta content=en_US property=og:locale><meta content=summary_large_image name=twitter:card><meta content="Docker Anti-Patterns: How Not to Build Production Containers" name=twitter:title><meta content="The worst Docker mistakes in production — bloated images, running as root, no health checks, secrets baked into layers. A catalog of container anti-patterns." name=twitter:description><link title="RSS Feed" href=https://hownotto.dev/rss.xml rel=alternate type=application/rss+xml><link title="Atom Feed" href=https://hownotto.dev/atom.xml rel=alternate type=application/atom+xml><link href=/favicon.svg rel=icon type=image/svg+xml><link href=/apple-touch-icon.png rel=apple-touch-icon><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link href=https://hownotto.dev/style.css rel=stylesheet><script type=application/ld+json>
+[
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Docker Anti-Patterns: How Not to Build Production Containers",
+    "description": "The worst Docker mistakes in production — bloated images, running as root, no health checks, secrets baked into layers. A catalog of container anti-patterns.",
+    "datePublished": "2024-01-05T00:00:00+00:00",
+    "dateModified": "2024-01-05T00:00:00+00:00",
+    
+    "author": {
+        "@type": "Person",
+        "name": "How Not To Dev"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "How Not To Dev"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;docker-best-practices&#x2F;"
+    },
+    "keywords": "anti-patterns, docker, devops, containers"
+    
+},
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https:&#x2F;&#x2F;hownotto.dev"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://hownotto.dev/blog/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Docker Anti-Patterns: How Not to Build Production Containers",
+            "item": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;docker-best-practices&#x2F;"
+        }
+    ]
+}
+]
+</script><meta content=2024-01-05T00:00:00+00:00 property=article:published_time><meta content=2024-01-05T00:00:00+00:00 property=article:modified_time><meta content=anti-patterns property=article:tag><meta content=docker property=article:tag><meta content=devops property=article:tag><meta content=containers property=article:tag><body><a class=skip-link href=#main-content>Skip to main content</a><header class=site-header><nav aria-label="Main navigation" class=nav-container><a aria-label="How Not To Dev - Home" class=site-logo href=https://hownotto.dev> <span class=logo-text>How Not To Dev</span> </a><ul class=nav-links><li><a href=https://hownotto.dev/blog/>Blog</a><li><a href=https://hownotto.dev/about/>About</a><li><a href=https://hownotto.dev/tags>Tags</a><li><a aria-label="RSS Feed" href=https://hownotto.dev/rss.xml>RSS</a></ul><button aria-label="Toggle dark mode" class=theme-toggle id=theme-toggle><svg viewbox="0 0 24 24" class=sun-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5 /><line x1=12 x2=12 y1=1 y2=3 /><line x1=12 x2=12 y1=21 y2=23 /><line x1=4.22 x2=5.64 y1=4.22 y2=5.64 /><line x1=18.36 x2=19.78 y1=18.36 y2=19.78 /><line x1=1 x2=3 y1=12 y2=12 /><line x1=21 x2=23 y1=12 y2=12 /><line x1=4.22 x2=5.64 y1=19.78 y2=18.36 /><line x1=18.36 x2=19.78 y1=5.64 y2=4.22 /></svg> <svg viewbox="0 0 24 24" class=moon-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></nav></header><main id=main-content><article class=article itemscope itemtype=https://schema.org/Article><header class=article-header><div class=article-header-content><div class=article-categories><a href=https://hownotto.dev/categories/anti-patterns/>Anti-Patterns</a></div><h1 itemprop=headline>Docker Anti-Patterns: How Not to Build Production Containers</h1><p class=article-description itemprop=description>The worst Docker mistakes in production — bloated images, running as root, no health checks, secrets baked into layers. A catalog of container anti-patterns.<div class=article-meta><span class=author itemprop=author itemscope itemtype=https://schema.org/Person> <span itemprop=name>How Not To Dev</span> </span><time datetime=2024-01-05 itemprop=datePublished> January 05, 2024 </time><span class=reading-time>2 min read</span></div></div></header><aside class=table-of-contents><details open><summary>Table of Contents</summary> <nav aria-label="Table of contents"><ul><li><a href=https://hownotto.dev/blog/docker-best-practices/#use-multi-stage-builds>Use Multi-Stage Builds</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#use-specific-base-image-tags>Use Specific Base Image Tags</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#minimize-layers-and-leverage-caching>Minimize Layers and Leverage Caching</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#run-as-non-root-user>Run as Non-Root User</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#use-dockerignore>Use .dockerignore</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#health-checks>Health Checks</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#security-best-practices>Security Best Practices</a> <ul><li><a href=https://hownotto.dev/blog/docker-best-practices/#scan-for-vulnerabilities>Scan for Vulnerabilities</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#don-t-store-secrets-in-images>Don’t Store Secrets in Images</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#use-read-only-file-system>Use Read-Only File System</a></ul><li><a href=https://hownotto.dev/blog/docker-best-practices/#optimize-for-production>Optimize for Production</a> <ul><li><a href=https://hownotto.dev/blog/docker-best-practices/#use-alpine-based-images>Use Alpine-Based Images</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#copy-only-what-s-needed>Copy Only What’s Needed</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#set-resource-limits>Set Resource Limits</a></ul><li><a href=https://hownotto.dev/blog/docker-best-practices/#logging-best-practices>Logging Best Practices</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#example-production-dockerfile>Example Production Dockerfile</a><li><a href=https://hownotto.dev/blog/docker-best-practices/#conclusion>Conclusion</a></ul></nav></details></aside><div class=article-content itemprop=articleBody><p>Docker has revolutionized how we build, ship, and run applications. But with great power comes great responsibility—poorly configured containers can lead to security vulnerabilities, bloated images, and production headaches. Here’s how to do Docker right.</p><span id=continue-reading></span><h2 id=use-multi-stage-builds>Use Multi-Stage Builds</h2><p>Multi-stage builds are the single most impactful optimization for your Docker images.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># Bad - includes build tools in final image</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20</span></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> package*.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm install</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> . .</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm run build</span></span>
+<span class=giallo-l><span style=color:#f97583>CMD</span><span> [</span><span style=color:#9ecbff>"node"</span><span>, </span><span style=color:#9ecbff>"dist/index.js"</span><span>]</span></span>
+<span class=giallo-l><span style=color:#6a737d># Final image: ~1GB</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good - multi-stage build</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20 </span><span style=color:#f97583>AS</span><span> builder</span></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> package*.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm ci</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> . .</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm run build</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine</span></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> --from=builder /app/dist ./dist</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> --from=builder /app/node_modules ./node_modules</span></span>
+<span class=giallo-l><span style=color:#f97583>CMD</span><span> [</span><span style=color:#9ecbff>"node"</span><span>, </span><span style=color:#9ecbff>"dist/index.js"</span><span>]</span></span>
+<span class=giallo-l><span style=color:#6a737d># Final image: ~150MB</span></span></code></pre><p>Benefits:<ul><li>Smaller images (10x reduction is common)<li>No build tools or dev dependencies in production<li>Faster deployments and lower storage costs</ul><h2 id=use-specific-base-image-tags>Use Specific Base Image Tags</h2><p>Never use <code>latest</code>—it’s a recipe for non-reproducible builds.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># Bad - unpredictable</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:latest</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Better - specific version</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Best - specific version with digest</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20.11.0-alpine3.19@sha256:abc123...</span></span></code></pre><h2 id=minimize-layers-and-leverage-caching>Minimize Layers and Leverage Caching</h2><p>Order your Dockerfile instructions from least to most frequently changing.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># Bad - cache invalidated on any code change</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> . .</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm install</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good - dependencies cached separately</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine</span></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Dependencies change less frequently</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> package*.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm ci --only=production</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Code changes more frequently</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> . .</span></span></code></pre><h2 id=run-as-non-root-user>Run as Non-Root User</h2><p>Running as root inside containers is a security risk.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Create app user</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> addgroup -g 1001 -S appgroup && \</span></span>
+<span class=giallo-l><span>    adduser -u 1001 -S appuser -G appgroup</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> --chown=appuser:appgroup . .</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Switch to non-root user</span></span>
+<span class=giallo-l><span style=color:#f97583>USER</span><span> appuser</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>CMD</span><span> [</span><span style=color:#9ecbff>"node"</span><span>, </span><span style=color:#9ecbff>"index.js"</span><span>]</span></span></code></pre><h2 id=use-dockerignore>Use .dockerignore</h2><p>Just like <code>.gitignore</code>, a <code>.dockerignore</code> keeps unnecessary files out of your image.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=plain><span class=giallo-l><span># .dockerignore</span></span>
+<span class=giallo-l><span>node_modules</span></span>
+<span class=giallo-l><span>npm-debug.log</span></span>
+<span class=giallo-l><span>.git</span></span>
+<span class=giallo-l><span>.gitignore</span></span>
+<span class=giallo-l><span>.env</span></span>
+<span class=giallo-l><span>.env.*</span></span>
+<span class=giallo-l><span>*.md</span></span>
+<span class=giallo-l><span>!README.md</span></span>
+<span class=giallo-l><span>Dockerfile*</span></span>
+<span class=giallo-l><span>docker-compose*</span></span>
+<span class=giallo-l><span>.dockerignore</span></span>
+<span class=giallo-l><span>coverage</span></span>
+<span class=giallo-l><span>.nyc_output</span></span>
+<span class=giallo-l><span>tests</span></span>
+<span class=giallo-l><span>__tests__</span></span>
+<span class=giallo-l><span>*.test.js</span></span>
+<span class=giallo-l><span>*.spec.js</span></span></code></pre><p>This:<ul><li>Reduces build context size<li>Speeds up builds<li>Prevents secrets from being copied</ul><h2 id=health-checks>Health Checks</h2><p>Let Docker know when your application is actually ready.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine</span></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> . .</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>HEALTHCHECK</span><span> --interval=30s --timeout=3s --start-period=5s --retries=3 \</span></span>
+<span class=giallo-l><span style=color:#f97583>  CMD</span><span> wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>CMD</span><span> [</span><span style=color:#9ecbff>"node"</span><span>, </span><span style=color:#9ecbff>"index.js"</span><span>]</span></span></code></pre><p>Health checks enable:<ul><li>Automatic container restarts on failure<li>Load balancer integration<li>Proper rolling deployments</ul><h2 id=security-best-practices>Security Best Practices</h2><h3 id=scan-for-vulnerabilities>Scan for Vulnerabilities</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=shellscript><span class=giallo-l><span style=color:#6a737d># Docker Scout</span></span>
+<span class=giallo-l><span style=color:#b392f0>docker</span><span style=color:#9ecbff> scout cves myimage:latest</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Trivy</span></span>
+<span class=giallo-l><span style=color:#b392f0>trivy</span><span style=color:#9ecbff> image myimage:latest</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Snyk</span></span>
+<span class=giallo-l><span style=color:#b392f0>snyk</span><span style=color:#9ecbff> container test myimage:latest</span></span></code></pre><h3 id=don-t-store-secrets-in-images>Don’t Store Secrets in Images</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># Never do this</span></span>
+<span class=giallo-l><span style=color:#f97583>ENV</span><span> DATABASE_PASSWORD=supersecret</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Use runtime secrets instead</span></span>
+<span class=giallo-l><span style=color:#6a737d># Docker Swarm: docker secret</span></span>
+<span class=giallo-l><span style=color:#6a737d># Kubernetes: Secrets/ConfigMaps</span></span>
+<span class=giallo-l><span style=color:#6a737d># Runtime: environment variables from secure sources</span></span></code></pre><h3 id=use-read-only-file-system>Use Read-Only File System</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=shellscript><span class=giallo-l><span style=color:#b392f0>docker</span><span style=color:#9ecbff> run</span><span style=color:#79b8ff> --read-only --tmpfs</span><span style=color:#9ecbff> /tmp myimage</span></span></code></pre><h2 id=optimize-for-production>Optimize for Production</h2><h3 id=use-alpine-based-images>Use Alpine-Based Images</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># Standard image: ~1GB</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Alpine image: ~180MB</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine</span></span></code></pre><h3 id=copy-only-what-s-needed>Copy Only What’s Needed</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># Bad - copies everything</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> . .</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good - explicit about what's needed</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> package*.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> src ./src</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> config ./config</span></span></code></pre><h3 id=set-resource-limits>Set Resource Limits</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=yaml><span class=giallo-l><span style=color:#6a737d># docker-compose.yml</span></span>
+<span class=giallo-l><span style=color:#85e89d>services</span><span>:</span></span>
+<span class=giallo-l><span style=color:#85e89d>  app</span><span>:</span></span>
+<span class=giallo-l><span style=color:#85e89d>    image</span><span>:</span><span style=color:#9ecbff> myapp</span></span>
+<span class=giallo-l><span style=color:#85e89d>    deploy</span><span>:</span></span>
+<span class=giallo-l><span style=color:#85e89d>      resources</span><span>:</span></span>
+<span class=giallo-l><span style=color:#85e89d>        limits</span><span>:</span></span>
+<span class=giallo-l><span style=color:#85e89d>          cpus</span><span>:</span><span style=color:#9ecbff> '0.50'</span></span>
+<span class=giallo-l><span style=color:#85e89d>          memory</span><span>:</span><span style=color:#9ecbff> 512M</span></span>
+<span class=giallo-l><span style=color:#85e89d>        reservations</span><span>:</span></span>
+<span class=giallo-l><span style=color:#85e89d>          cpus</span><span>:</span><span style=color:#9ecbff> '0.25'</span></span>
+<span class=giallo-l><span style=color:#85e89d>          memory</span><span>:</span><span style=color:#9ecbff> 256M</span></span></code></pre><h2 id=logging-best-practices>Logging Best Practices</h2><p>Write logs to stdout/stderr, not files.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=javascript><span class=giallo-l><span style=color:#6a737d>// Good - logs to stdout</span></span>
+<span class=giallo-l><span>console.</span><span style=color:#b392f0>log</span><span>(</span><span style=color:#9ecbff>'Application started'</span><span>);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>// Bad - logs to file inside container</span></span>
+<span class=giallo-l><span>fs.</span><span style=color:#b392f0>writeFileSync</span><span>(</span><span style=color:#9ecbff>'/var/log/app.log'</span><span>,</span><span style=color:#9ecbff> 'Application started'</span><span>);</span></span></code></pre><p>Let the container runtime handle log aggregation.<h2 id=example-production-dockerfile>Example Production Dockerfile</h2><p>Here’s a complete example putting it all together:<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=docker><span class=giallo-l><span style=color:#6a737d># syntax=docker/dockerfile:1.4</span></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> node:20-alpine </span><span style=color:#f97583>AS</span><span> base</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> apk add --no-cache tini</span></span>
+<span class=giallo-l><span style=color:#f97583>WORKDIR</span><span> /app</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> base </span><span style=color:#f97583>AS</span><span> dependencies</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> package*.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm ci --only=production && npm cache clean --force</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> base </span><span style=color:#f97583>AS</span><span> build</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> package*.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm ci</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> tsconfig.json ./</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> src ./src</span></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> npm run build</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>FROM</span><span> base </span><span style=color:#f97583>AS</span><span> production</span></span>
+<span class=giallo-l><span style=color:#f97583>ENV</span><span> NODE_ENV=production</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>RUN</span><span> addgroup -g 1001 -S nodejs && \</span></span>
+<span class=giallo-l><span>    adduser -u 1001 -S nodejs -G nodejs</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> --from=dependencies --chown=nodejs:nodejs /app/node_modules ./node_modules</span></span>
+<span class=giallo-l><span style=color:#f97583>COPY</span><span> --from=build --chown=nodejs:nodejs /app/dist ./dist</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>USER</span><span> nodejs</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>HEALTHCHECK</span><span> --interval=30s --timeout=3s --start-period=5s --retries=3 \</span></span>
+<span class=giallo-l><span style=color:#f97583>  CMD</span><span> wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>EXPOSE</span><span> 3000</span></span>
+<span class=giallo-l><span style=color:#f97583>ENTRYPOINT</span><span> [</span><span style=color:#9ecbff>"/sbin/tini"</span><span>, </span><span style=color:#9ecbff>"--"</span><span>]</span></span>
+<span class=giallo-l><span style=color:#f97583>CMD</span><span> [</span><span style=color:#9ecbff>"node"</span><span>, </span><span style=color:#9ecbff>"dist/index.js"</span><span>]</span></span></code></pre><h2 id=conclusion>Conclusion</h2><p>Production-ready Docker images require attention to:<ul><li><strong>Size</strong> - Multi-stage builds, Alpine base images<li><strong>Security</strong> - Non-root users, vulnerability scanning<li><strong>Reliability</strong> - Health checks, resource limits<li><strong>Reproducibility</strong> - Pinned versions, <code>.dockerignore</code></ul><p>Take the time to optimize your Dockerfiles—your future deployments will thank you.<hr><p><em>What Docker practices have made the biggest difference in your production deployments?</em></div><footer class=article-footer><div class=article-tags><span>Tags:</span><a class=tag href=https://hownotto.dev/tags/anti-patterns/ rel=tag>anti-patterns</a><a class=tag href=https://hownotto.dev/tags/docker/ rel=tag>docker</a><a class=tag href=https://hownotto.dev/tags/devops/ rel=tag>devops</a><a class=tag href=https://hownotto.dev/tags/containers/ rel=tag>containers</a></div></footer><nav aria-label="Post navigation" class=article-navigation><a class=nav-prev href=https://hownotto.dev/blog/api-design-mistakes/> <span class=nav-label>← Previous</span> <span class=nav-title>7 API Design Anti-Patterns That Will Ruin Your Architecture</span> </a></nav></article></main><footer class=site-footer><div class=footer-content><p>© 2026 How Not To Dev. All rights reserved.<nav aria-label="Footer navigation" class=footer-links><a href=https://hownotto.dev/rss.xml>RSS</a></nav></div></footer><script>// Theme toggle with localStorage persistence
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme === 'dark');
+        } else {
+            setTheme(prefersDark.matches);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches);
+            }
+        });</script>

@@ -1,0 +1,111 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1.0" name=viewport><title>Why You Should Never Use 'int' in Modern C | How Not To Dev</title><meta content="Why You Should Never Use 'int' in Modern C | How Not To Dev" name=title><meta content="The int type is a portability disaster — its size varies across platforms, causing silent bugs and security vulnerabilities. Use fixed-width types like int32_t instead." name=description><meta content="How Not To Dev" name=author><meta content="index, follow" name=robots><link href=https://hownotto.dev/blog/why-not-use-int-in-c/ rel=canonical><meta content=article property=og:type><meta content=https://hownotto.dev/blog/why-not-use-int-in-c/ property=og:url><meta content="Why You Should Never Use 'int' in Modern C" property=og:title><meta content="The int type is a portability disaster — its size varies across platforms, causing silent bugs and security vulnerabilities. Use fixed-width types like int32_t instead." property=og:description><meta content="How Not To Dev" property=og:site_name><meta content=en_US property=og:locale><meta content=summary_large_image name=twitter:card><meta content="Why You Should Never Use 'int' in Modern C" name=twitter:title><meta content="The int type is a portability disaster — its size varies across platforms, causing silent bugs and security vulnerabilities. Use fixed-width types like int32_t instead." name=twitter:description><meta content=/blog/why-not-use-int-in-c/int-vs-int32_t.jpg name=twitter:image><link title="RSS Feed" href=https://hownotto.dev/rss.xml rel=alternate type=application/rss+xml><link title="Atom Feed" href=https://hownotto.dev/atom.xml rel=alternate type=application/atom+xml><link href=/favicon.svg rel=icon type=image/svg+xml><link href=/apple-touch-icon.png rel=apple-touch-icon><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link href=https://hownotto.dev/style.css rel=stylesheet><script type=application/ld+json>
+[
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Why You Should Never Use &#x27;int&#x27; in Modern C",
+    "description": "The int type is a portability disaster — its size varies across platforms, causing silent bugs and security vulnerabilities. Use fixed-width types like int32_t instead.",
+    "datePublished": "2024-01-20T00:00:00+00:00",
+    "dateModified": "2024-01-20T00:00:00+00:00",
+    "image": "&#x2F;blog&#x2F;why-not-use-int-in-c&#x2F;int-vs-int32_t.jpg",
+    "author": {
+        "@type": "Person",
+        "name": "How Not To Dev"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "How Not To Dev"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;why-not-use-int-in-c&#x2F;"
+    },
+    "keywords": "anti-patterns, c-programming, portability, type-safety"
+    
+},
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https:&#x2F;&#x2F;hownotto.dev"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://hownotto.dev/blog/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Why You Should Never Use &#x27;int&#x27; in Modern C",
+            "item": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;why-not-use-int-in-c&#x2F;"
+        }
+    ]
+}
+]
+</script><meta content=2024-01-20T00:00:00+00:00 property=article:published_time><meta content=2024-01-20T00:00:00+00:00 property=article:modified_time><meta content=anti-patterns property=article:tag><meta content=c-programming property=article:tag><meta content=portability property=article:tag><meta content=type-safety property=article:tag><meta content=/blog/why-not-use-int-in-c/int-vs-int32_t.jpg property=og:image><body><a class=skip-link href=#main-content>Skip to main content</a><header class=site-header><nav aria-label="Main navigation" class=nav-container><a aria-label="How Not To Dev - Home" class=site-logo href=https://hownotto.dev> <span class=logo-text>How Not To Dev</span> </a><ul class=nav-links><li><a href=https://hownotto.dev/blog/>Blog</a><li><a href=https://hownotto.dev/about/>About</a><li><a href=https://hownotto.dev/tags>Tags</a><li><a aria-label="RSS Feed" href=https://hownotto.dev/rss.xml>RSS</a></ul><button aria-label="Toggle dark mode" class=theme-toggle id=theme-toggle><svg viewbox="0 0 24 24" class=sun-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5 /><line x1=12 x2=12 y1=1 y2=3 /><line x1=12 x2=12 y1=21 y2=23 /><line x1=4.22 x2=5.64 y1=4.22 y2=5.64 /><line x1=18.36 x2=19.78 y1=18.36 y2=19.78 /><line x1=1 x2=3 y1=12 y2=12 /><line x1=21 x2=23 y1=12 y2=12 /><line x1=4.22 x2=5.64 y1=19.78 y2=18.36 /><line x1=18.36 x2=19.78 y1=5.64 y2=4.22 /></svg> <svg viewbox="0 0 24 24" class=moon-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></nav></header><main id=main-content><article class=article itemscope itemtype=https://schema.org/Article><header class=article-header><div class=article-header-content><div class=article-categories><a href=https://hownotto.dev/categories/anti-patterns/>Anti-Patterns</a></div><h1 itemprop=headline>Why You Should Never Use 'int' in Modern C</h1><p class=article-description itemprop=description>The int type is a portability disaster — its size varies across platforms, causing silent bugs and security vulnerabilities. Use fixed-width types like int32_t instead.<div class=article-meta><span class=author itemprop=author itemscope itemtype=https://schema.org/Person> <span itemprop=name>How Not To Dev</span> </span><time datetime=2024-01-20 itemprop=datePublished> January 20, 2024 </time><span class=reading-time>4 min read</span></div></div></header><figure class=article-hero><img alt="Comparison between int and int32_t in C programming" decoding=async itemprop=image src=/blog/why-not-use-int-in-c/int-vs-int32_t.jpg></figure><aside class=table-of-contents><details open><summary>Table of Contents</summary> <nav aria-label="Table of contents"><ul><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#the-problem-int-has-no-fixed-size>The Problem: int Has No Fixed Size</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#real-world-disasters>Real-World Disasters</a> <ul><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#the-370-million-explosion-ariane-5-flight-501>The $370 Million Explosion: Ariane 5 Flight 501</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#silent-overflow>Silent Overflow</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#security-vulnerabilities>Security Vulnerabilities</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#cross-platform-data-corruption>Cross-Platform Data Corruption</a></ul><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#the-fix-fixed-width-integer-types>The Fix: Fixed-Width Integer Types</a> <ul><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#why-fixed-width-types-are-better>Why Fixed-Width Types Are Better</a></ul><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#when-int-is-still-acceptable>When int Is Still Acceptable</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#the-anti-pattern-in-action>The Anti-Pattern in Action</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#what-about-performance>What About Performance?</a><li><a href=https://hownotto.dev/blog/why-not-use-int-in-c/#conclusion>Conclusion</a></ul></nav></details></aside><div class=article-content itemprop=articleBody><p>The <code>int</code> type in C is one of the oldest anti-patterns still in active use. It feels natural — it’s short, it’s everywhere, and it “just works.” Until it doesn’t.</p><span id=continue-reading></span><h2 id=the-problem-int-has-no-fixed-size>The Problem: <code>int</code> Has No Fixed Size</h2><p>The C standard guarantees only that <code>int</code> is <em>at least</em> 16 bits. That’s it. The actual size depends on the compiler and target architecture:<table><thead><tr><th>Platform<th><code>sizeof(int)</code><tbody><tr><td>Arduino (AVR)<td>2 bytes (16-bit)<tr><td>x86 Linux/Windows<td>4 bytes (32-bit)<tr><td>Most 64-bit systems<td>4 bytes (32-bit)<tr><td>Some embedded systems<td>2 bytes (16-bit)</table><p>This means code that “works” on your machine can silently break when compiled elsewhere.<h2 id=real-world-disasters>Real-World Disasters</h2><h3 id=the-370-million-explosion-ariane-5-flight-501>The $370 Million Explosion: Ariane 5 Flight 501</h3><p>On June 4, 1996, the European Space Agency launched the Ariane 5 rocket on its maiden flight. Thirty-seven seconds after liftoff, the rocket veered off course and self-destructed. Total loss: $370 million in hardware and four scientific satellites.<p>The cause? A 64-bit floating-point number was converted to a 16-bit signed integer. The value was larger than 32,767 (the maximum for a signed 16-bit int), causing an overflow. The navigation system interpreted the garbage value as a legitimate flight correction, sending the rocket tumbling.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=ada><span class=giallo-l><span style=color:#6a737d>-- Simplified reconstruction of the fatal conversion</span></span>
+<span class=giallo-l><span style=color:#6a737d>-- The horizontal velocity value exceeded 16-bit range</span></span>
+<span class=giallo-l><span>L_M_BV_32 </span><span style=color:#f97583>:=</span><span> TBD.T_ENTIER_32S((1.0</span><span style=color:#f97583>/</span><span>C_M_LSB_BV) </span><span style=color:#f97583>*</span><span> G_M_INFO_DERIVE(T_ALG.E_BV));</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>-- This was then converted to 16-bit, causing overflow</span></span>
+<span class=giallo-l><span>BV </span><span style=color:#f97583>:=</span><span> TDB.T_ENTIER_16S(L_M_BV_32);  </span><span style=color:#6a737d>-- BOOM</span></span></code></pre><p>The tragic irony: this code was reused from Ariane 4, where the values never exceeded 16-bit range. Nobody verified the assumptions still held for the faster Ariane 5.<p>The official investigation report concluded: <em>“The internal SRI software exception was caused during execution of a data conversion from 64-bit floating point to 16-bit signed integer value.”</em><p>This is the most expensive integer overflow bug in history — and a permanent reminder of why fixed-width types with explicit range checking matter.<h3 id=silent-overflow>Silent Overflow</h3><pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=c><span class=giallo-l><span style=color:#6a737d>// Works fine on 32-bit int systems</span></span>
+<span class=giallo-l><span style=color:#f97583>int</span><span> sensor_reading </span><span style=color:#f97583>=</span><span style=color:#79b8ff> 100000</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>// Silently wraps on 16-bit int systems</span></span>
+<span class=giallo-l><span style=color:#6a737d>// 100000 becomes 34464 (100000 % 65536)</span></span></code></pre><p>No warning. No error. Just wrong data.<h3 id=security-vulnerabilities>Security Vulnerabilities</h3><p>Integer overflow is a classic attack vector. When <code>int</code> size is unpredictable, so is overflow behavior:<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=c><span class=giallo-l><span style=color:#f97583>int</span><span> length </span><span style=color:#f97583>=</span><span style=color:#b392f0> get_user_input</span><span>();</span><span style=color:#6a737d>  // Attacker controls this</span></span>
+<span class=giallo-l><span style=color:#f97583>char *</span><span>buffer </span><span style=color:#f97583>=</span><span style=color:#b392f0> malloc</span><span>(length);</span><span style=color:#6a737d>  // What if length overflowed?</span></span>
+<span class=giallo-l><span style=color:#b392f0>memcpy</span><span>(buffer, data, length);</span><span style=color:#6a737d>   // Buffer overflow</span></span></code></pre><p>The 2014 Heartbleed vulnerability was partly caused by integer size assumptions. Countless CVEs trace back to <code>int</code> overflow on unexpected platforms.<h3 id=cross-platform-data-corruption>Cross-Platform Data Corruption</h3><p>Serializing an <code>int</code> and deserializing on another platform:<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=c><span class=giallo-l><span style=color:#6a737d>// Machine A (32-bit int): writes 4 bytes</span></span>
+<span class=giallo-l><span style=color:#b392f0>fwrite</span><span>(</span><span style=color:#f97583>&</span><span style=color:#ffab70>value</span><span>,</span><span style=color:#f97583> sizeof</span><span>(</span><span style=color:#f97583>int</span><span>),</span><span style=color:#79b8ff> 1</span><span>, file);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>// Machine B (16-bit int): reads 2 bytes</span></span>
+<span class=giallo-l><span style=color:#b392f0>fread</span><span>(</span><span style=color:#f97583>&</span><span style=color:#ffab70>value</span><span>,</span><span style=color:#f97583> sizeof</span><span>(</span><span style=color:#f97583>int</span><span>),</span><span style=color:#79b8ff> 1</span><span>, file);</span></span>
+<span class=giallo-l><span style=color:#6a737d>// Reads garbage, file position now wrong</span></span></code></pre><p>Binary protocols, file formats, network packets — all break silently.<h2 id=the-fix-fixed-width-integer-types>The Fix: Fixed-Width Integer Types</h2><p>C99 introduced <code>&lt;stdint.h></code> with types that guarantee their size:<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=c><span class=giallo-l><span style=color:#f97583>#include</span><span style=color:#9ecbff> &lt;stdint.h></span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>int32_t</span><span>  counter;</span><span style=color:#6a737d>      // Always 32 bits, signed</span></span>
+<span class=giallo-l><span style=color:#f97583>uint32_t</span><span> flags;</span><span style=color:#6a737d>        // Always 32 bits, unsigned</span></span>
+<span class=giallo-l><span style=color:#f97583>int16_t</span><span>  sensor_value;</span><span style=color:#6a737d> // Always 16 bits, signed</span></span>
+<span class=giallo-l><span style=color:#f97583>uint8_t</span><span>  byte;</span><span style=color:#6a737d>         // Always 8 bits, unsigned</span></span>
+<span class=giallo-l><span style=color:#f97583>int64_t</span><span>  timestamp;</span><span style=color:#6a737d>    // Always 64 bits, signed</span></span></code></pre><h3 id=why-fixed-width-types-are-better>Why Fixed-Width Types Are Better</h3><ol><li><strong>Portable</strong> — Same size on every platform<li><strong>Self-documenting</strong> — <code>int32_t</code> tells you exactly what to expect<li><strong>Predictable overflow</strong> — You know when it will happen<li><strong>Binary compatibility</strong> — Safe for serialization and protocols<li><strong>Security</strong> — Easier to audit for overflow vulnerabilities</ol><h2 id=when-int-is-still-acceptable>When <code>int</code> Is Still Acceptable</h2><p>There are a few narrow cases:<ul><li><strong>Loop counters</strong> for small, bounded iterations: <code>for (int i = 0; i &lt; 10; i++)</code><li><strong>Return values</strong> for success/failure (0/-1 convention)<li><strong>Interfacing with legacy APIs</strong> that expect <code>int</code></ul><p>Even then, consider whether <code>size_t</code> (for array indexing) or a fixed-width type would be clearer.<h2 id=the-anti-pattern-in-action>The Anti-Pattern in Action</h2><p>Here’s typical bad code:<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=c><span class=giallo-l><span style=color:#6a737d>// Anti-pattern: unclear sizes, non-portable</span></span>
+<span class=giallo-l><span style=color:#f97583>struct</span><span> Packet {</span></span>
+<span class=giallo-l><span style=color:#f97583>    int</span><span> header;</span></span>
+<span class=giallo-l><span style=color:#f97583>    int</span><span> length;</span></span>
+<span class=giallo-l><span style=color:#f97583>    int</span><span> checksum;</span></span>
+<span class=giallo-l><span>};</span></span></code></pre><p>Fixed version:<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=c><span class=giallo-l><span style=color:#6a737d>// Correct: explicit sizes, portable, serialization-safe</span></span>
+<span class=giallo-l><span style=color:#f97583>#include</span><span style=color:#9ecbff> &lt;stdint.h></span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>struct</span><span> Packet {</span></span>
+<span class=giallo-l><span style=color:#f97583>    uint32_t</span><span> header;</span></span>
+<span class=giallo-l><span style=color:#f97583>    uint32_t</span><span> length;</span></span>
+<span class=giallo-l><span style=color:#f97583>    uint32_t</span><span> checksum;</span></span>
+<span class=giallo-l><span>};</span></span></code></pre><h2 id=what-about-performance>What About Performance?</h2><p>A common excuse: “But <code>int</code> is the native word size, so it’s faster!”<p>This was true decades ago. Modern compilers optimize fixed-width types just as well. Profile if you’re skeptical — you won’t find a difference in real workloads.<p>The tiny theoretical performance gain (if any) isn’t worth the portability and security risks.<h2 id=conclusion>Conclusion</h2><p>Using <code>int</code> for anything beyond trivial local variables is a portability anti-pattern. The size is undefined, the behavior is unpredictable across platforms, and the security implications are severe.<p><strong>Use <code>&lt;stdint.h></code> fixed-width types:</strong><ul><li><code>int32_t</code> / <code>uint32_t</code> for general 32-bit integers<li><code>int64_t</code> / <code>uint64_t</code> for large values or timestamps<li><code>int16_t</code> / <code>uint16_t</code> for memory-constrained environments<li><code>int8_t</code> / <code>uint8_t</code> for byte manipulation</ul><p>Your future self — and everyone who ports your code — will thank you.<hr><p><em>What C anti-patterns have bitten you in production? Share your war stories.</em></div><footer class=article-footer><div class=article-tags><span>Tags:</span><a class=tag href=https://hownotto.dev/tags/anti-patterns/ rel=tag>anti-patterns</a><a class=tag href=https://hownotto.dev/tags/c-programming/ rel=tag>c-programming</a><a class=tag href=https://hownotto.dev/tags/portability/ rel=tag>portability</a><a class=tag href=https://hownotto.dev/tags/type-safety/ rel=tag>type-safety</a></div></footer><nav aria-label="Post navigation" class=article-navigation><a class=nav-next href=https://hownotto.dev/blog/clean-code-principles/> <span class=nav-label>Next →</span> <span class=nav-title>Dirty Code Anti-Patterns: What Bad Code Actually Looks Like</span> </a></nav></article></main><footer class=site-footer><div class=footer-content><p>© 2026 How Not To Dev. All rights reserved.<nav aria-label="Footer navigation" class=footer-links><a href=https://hownotto.dev/rss.xml>RSS</a></nav></div></footer><script>// Theme toggle with localStorage persistence
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme === 'dark');
+        } else {
+            setTheme(prefersDark.matches);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches);
+            }
+        });</script>

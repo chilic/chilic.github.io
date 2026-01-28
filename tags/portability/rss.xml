@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>How Not To Dev - portability</title>
+      <link>https://hownotto.dev</link>
+      <description>Exposing anti-patterns, architectural mistakes, and badly written code — so you know what not to do.</description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://hownotto.dev/tags/portability/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sat, 20 Jan 2024 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Why You Should Never Use &#x27;int&#x27; in Modern C</title>
+          <pubDate>Sat, 20 Jan 2024 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://hownotto.dev/blog/why-not-use-int-in-c/</link>
+          <guid>https://hownotto.dev/blog/why-not-use-int-in-c/</guid>
+          <description xml:base="https://hownotto.dev/blog/why-not-use-int-in-c/">&lt;p&gt;The &lt;code&gt;int&lt;&#x2F;code&gt; type in C is one of the oldest anti-patterns still in active use. It feels natural — it’s short, it’s everywhere, and it “just works.” Until it doesn’t.&lt;&#x2F;p&gt;</description>
+      </item>
+    </channel>
+</rss>

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hownotto.dev/sitemap.xml
+
+# Disallow admin and private paths
+Disallow: /admin/
+Disallow: /private/

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>How Not To Dev - software-design</title>
+    <subtitle>Exposing anti-patterns, architectural mistakes, and badly written code — so you know what not to do.</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://hownotto.dev/tags/software-design/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://hownotto.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-01-15T00:00:00+00:00</updated>
+    <id>https://hownotto.dev/tags/software-design/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Dirty Code Anti-Patterns: What Bad Code Actually Looks Like</title>
+        <published>2024-01-15T00:00:00+00:00</published>
+        <updated>2024-01-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://hownotto.dev/blog/clean-code-principles/"/>
+        <id>https://hownotto.dev/blog/clean-code-principles/</id>
+        
+        <summary type="html">&lt;p&gt;Writing clean code isn’t just about making your code work—it’s about making it understandable, maintainable, and a joy to work with. Here are the essential principles every developer should internalize.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

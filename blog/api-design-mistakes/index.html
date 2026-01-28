@@ -1,0 +1,167 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1.0" name=viewport><title>7 API Design Anti-Patterns That Will Ruin Your Architecture | How Not To Dev</title><meta content="7 API Design Anti-Patterns That Will Ruin Your Architecture | How Not To Dev" name=title><meta content="Real-world API anti-patterns that cause developer pain — inconsistent naming, swallowed errors, missing pagination, and no versioning. A guide to terrible API design." name=description><meta content="How Not To Dev" name=author><meta content="index, follow" name=robots><link href=https://hownotto.dev/blog/api-design-mistakes/ rel=canonical><meta content=article property=og:type><meta content=https://hownotto.dev/blog/api-design-mistakes/ property=og:url><meta content="7 API Design Anti-Patterns That Will Ruin Your Architecture" property=og:title><meta content="Real-world API anti-patterns that cause developer pain — inconsistent naming, swallowed errors, missing pagination, and no versioning. A guide to terrible API design." property=og:description><meta content="How Not To Dev" property=og:site_name><meta content=en_US property=og:locale><meta content=summary_large_image name=twitter:card><meta content="7 API Design Anti-Patterns That Will Ruin Your Architecture" name=twitter:title><meta content="Real-world API anti-patterns that cause developer pain — inconsistent naming, swallowed errors, missing pagination, and no versioning. A guide to terrible API design." name=twitter:description><link title="RSS Feed" href=https://hownotto.dev/rss.xml rel=alternate type=application/rss+xml><link title="Atom Feed" href=https://hownotto.dev/atom.xml rel=alternate type=application/atom+xml><link href=/favicon.svg rel=icon type=image/svg+xml><link href=/apple-touch-icon.png rel=apple-touch-icon><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link href=https://hownotto.dev/style.css rel=stylesheet><script type=application/ld+json>
+[
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "7 API Design Anti-Patterns That Will Ruin Your Architecture",
+    "description": "Real-world API anti-patterns that cause developer pain — inconsistent naming, swallowed errors, missing pagination, and no versioning. A guide to terrible API design.",
+    "datePublished": "2024-01-10T00:00:00+00:00",
+    "dateModified": "2024-01-10T00:00:00+00:00",
+    
+    "author": {
+        "@type": "Person",
+        "name": "How Not To Dev"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "How Not To Dev"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;api-design-mistakes&#x2F;"
+    },
+    "keywords": "anti-patterns, api-design, rest, bad-architecture"
+    
+},
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https:&#x2F;&#x2F;hownotto.dev"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://hownotto.dev/blog/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "7 API Design Anti-Patterns That Will Ruin Your Architecture",
+            "item": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;api-design-mistakes&#x2F;"
+        }
+    ]
+}
+]
+</script><meta content=2024-01-10T00:00:00+00:00 property=article:published_time><meta content=2024-01-10T00:00:00+00:00 property=article:modified_time><meta content=anti-patterns property=article:tag><meta content=api-design property=article:tag><meta content=rest property=article:tag><meta content=bad-architecture property=article:tag><body><a class=skip-link href=#main-content>Skip to main content</a><header class=site-header><nav aria-label="Main navigation" class=nav-container><a aria-label="How Not To Dev - Home" class=site-logo href=https://hownotto.dev> <span class=logo-text>How Not To Dev</span> </a><ul class=nav-links><li><a href=https://hownotto.dev/blog/>Blog</a><li><a href=https://hownotto.dev/about/>About</a><li><a href=https://hownotto.dev/tags>Tags</a><li><a aria-label="RSS Feed" href=https://hownotto.dev/rss.xml>RSS</a></ul><button aria-label="Toggle dark mode" class=theme-toggle id=theme-toggle><svg viewbox="0 0 24 24" class=sun-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5 /><line x1=12 x2=12 y1=1 y2=3 /><line x1=12 x2=12 y1=21 y2=23 /><line x1=4.22 x2=5.64 y1=4.22 y2=5.64 /><line x1=18.36 x2=19.78 y1=18.36 y2=19.78 /><line x1=1 x2=3 y1=12 y2=12 /><line x1=21 x2=23 y1=12 y2=12 /><line x1=4.22 x2=5.64 y1=19.78 y2=18.36 /><line x1=18.36 x2=19.78 y1=5.64 y2=4.22 /></svg> <svg viewbox="0 0 24 24" class=moon-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></nav></header><main id=main-content><article class=article itemscope itemtype=https://schema.org/Article><header class=article-header><div class=article-header-content><div class=article-categories><a href=https://hownotto.dev/categories/anti-patterns/>Anti-Patterns</a></div><h1 itemprop=headline>7 API Design Anti-Patterns That Will Ruin Your Architecture</h1><p class=article-description itemprop=description>Real-world API anti-patterns that cause developer pain — inconsistent naming, swallowed errors, missing pagination, and no versioning. A guide to terrible API design.<div class=article-meta><span class=author itemprop=author itemscope itemtype=https://schema.org/Person> <span itemprop=name>How Not To Dev</span> </span><time datetime=2024-01-10 itemprop=datePublished> January 10, 2024 </time><span class=reading-time>3 min read</span></div></div></header><aside class=table-of-contents><details open><summary>Table of Contents</summary> <nav aria-label="Table of contents"><ul><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-1-inconsistent-naming-conventions>Mistake 1: Inconsistent Naming Conventions</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-2-ignoring-http-status-codes>Mistake 2: Ignoring HTTP Status Codes</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-3-poor-error-messages>Mistake 3: Poor Error Messages</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-4-not-versioning-your-api>Mistake 4: Not Versioning Your API</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-5-returning-too-much-or-too-little-data>Mistake 5: Returning Too Much (or Too Little) Data</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-6-ignoring-pagination>Mistake 6: Ignoring Pagination</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#mistake-7-no-rate-limiting>Mistake 7: No Rate Limiting</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#bonus-document-everything>Bonus: Document Everything</a><li><a href=https://hownotto.dev/blog/api-design-mistakes/#conclusion>Conclusion</a></ul></nav></details></aside><div class=article-content itemprop=articleBody><p>A well-designed API is a joy to use. A poorly designed one? It’s a source of endless frustration, bugs, and wasted developer hours. Here are the most common API design mistakes I’ve encountered—and how to avoid them.</p><span id=continue-reading></span><h2 id=mistake-1-inconsistent-naming-conventions>Mistake 1: Inconsistent Naming Conventions</h2><p>Nothing frustrates developers more than an API that can’t decide on a naming convention.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=shellscript><span class=giallo-l><span style=color:#6a737d># The nightmare API</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /getUsers</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /fetch-products</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /Order_history</span></span>
+<span class=giallo-l><span style=color:#b392f0>POST</span><span style=color:#9ecbff> /createNewUser</span></span>
+<span class=giallo-l><span style=color:#b392f0>POST</span><span style=color:#9ecbff> /add_product</span></span></code></pre><p><strong>The fix:</strong> Pick a convention and stick to it religiously.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=shellscript><span class=giallo-l><span style=color:#6a737d># Consistent REST API</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /users</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /products</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /orders</span></span>
+<span class=giallo-l><span style=color:#b392f0>POST</span><span style=color:#9ecbff> /users</span></span>
+<span class=giallo-l><span style=color:#b392f0>POST</span><span style=color:#9ecbff> /products</span></span></code></pre><p>Use:<ul><li><strong>Plural nouns</strong> for resources (<code>/users</code>, not <code>/user</code>)<li><strong>Kebab-case</strong> for multi-word resources (<code>/user-profiles</code>)<li><strong>HTTP verbs</strong> for actions, not URL verbs</ul><h2 id=mistake-2-ignoring-http-status-codes>Mistake 2: Ignoring HTTP Status Codes</h2><p>Returning <code>200 OK</code> for everything, including errors, is a cardinal sin.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=json><span class=giallo-l><span style=color:#6a737d>// Bad - Returns 200 with error in body</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "success"</span><span>:</span><span style=color:#79b8ff> false</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "error"</span><span>:</span><span style=color:#9ecbff> "User not found"</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>// Good - Returns 404 with helpful message</span></span>
+<span class=giallo-l><span style=color:#6a737d>// HTTP 404 Not Found</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "error"</span><span>: {</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "code"</span><span>:</span><span style=color:#9ecbff> "USER_NOT_FOUND"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "message"</span><span>:</span><span style=color:#9ecbff> "No user exists with ID 12345"</span></span>
+<span class=giallo-l><span>  }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre><p>Use status codes semantically:<ul><li><strong>2xx</strong> - Success<li><strong>4xx</strong> - Client errors (bad request, unauthorized, not found)<li><strong>5xx</strong> - Server errors</ul><h2 id=mistake-3-poor-error-messages>Mistake 3: Poor Error Messages</h2><p>Generic error messages waste everyone’s time.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=json><span class=giallo-l><span style=color:#6a737d>// Bad</span></span>
+<span class=giallo-l><span>{</span><span style=color:#79b8ff> "error"</span><span>:</span><span style=color:#9ecbff> "Invalid request"</span><span> }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>// Good</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "error"</span><span>: {</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "code"</span><span>:</span><span style=color:#9ecbff> "VALIDATION_ERROR"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "message"</span><span>:</span><span style=color:#9ecbff> "Request validation failed"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "details"</span><span>: [</span></span>
+<span class=giallo-l><span>      {</span></span>
+<span class=giallo-l><span style=color:#79b8ff>        "field"</span><span>:</span><span style=color:#9ecbff> "email"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>        "issue"</span><span>:</span><span style=color:#9ecbff> "Must be a valid email address"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>        "received"</span><span>:</span><span style=color:#9ecbff> "not-an-email"</span></span>
+<span class=giallo-l><span>      }</span></span>
+<span class=giallo-l><span>    ]</span></span>
+<span class=giallo-l><span>  }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre><p>Good error messages include:<ul><li>A machine-readable error code<li>A human-readable message<li>Details about what went wrong<li>Hints about how to fix it</ul><h2 id=mistake-4-not-versioning-your-api>Mistake 4: Not Versioning Your API</h2><p>APIs evolve. Breaking changes without versioning break your consumers’ applications.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=shellscript><span class=giallo-l><span style=color:#6a737d># Version in URL (most common)</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /v1/users</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /v2/users</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Version in header (cleaner URLs)</span></span>
+<span class=giallo-l><span style=color:#b392f0>GET</span><span style=color:#9ecbff> /users</span></span>
+<span class=giallo-l><span style=color:#b392f0>Accept:</span><span style=color:#9ecbff> application/vnd.myapi.v1+json</span></span></code></pre><p>Start with v1 from day one. It costs nothing and saves future pain.<h2 id=mistake-5-returning-too-much-or-too-little-data>Mistake 5: Returning Too Much (or Too Little) Data</h2><p>Over-fetching wastes bandwidth; under-fetching forces multiple requests.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=json><span class=giallo-l><span style=color:#6a737d>// Over-fetching - returns everything</span></span>
+<span class=giallo-l><span>GET /users/</span><span style=color:#79b8ff>123</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "id"</span><span>:</span><span style=color:#79b8ff> 123</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "name"</span><span>:</span><span style=color:#9ecbff> "John"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "email"</span><span>:</span><span style=color:#9ecbff> "john@example.com"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "password_hash"</span><span>:</span><span style=color:#9ecbff> "..."</span><span>,</span><span style=color:#6a737d>  // Security issue!</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "internal_notes"</span><span>:</span><span style=color:#9ecbff> "..."</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "created_at"</span><span>:</span><span style=color:#9ecbff> "..."</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "updated_at"</span><span>:</span><span style=color:#9ecbff> "..."</span><span>,</span></span>
+<span class=giallo-l><span style=color:#6a737d>  // ... 50 more fields</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d>// Better - return sensible defaults with field selection</span></span>
+<span class=giallo-l><span>GET /users/</span><span style=color:#79b8ff>123</span><span>?fields=id,name,email</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "id"</span><span>:</span><span style=color:#79b8ff> 123</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "name"</span><span>:</span><span style=color:#9ecbff> "John"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "email"</span><span>:</span><span style=color:#9ecbff> "john@example.com"</span></span>
+<span class=giallo-l><span>}</span></span></code></pre><p>Consider:<ul><li><strong>Field selection</strong> for customizing responses<li><strong>Pagination</strong> for collections<li><strong>Expansion</strong> for related resources (<code>?expand=orders</code>)</ul><h2 id=mistake-6-ignoring-pagination>Mistake 6: Ignoring Pagination</h2><p>Returning 10,000 records in one response is never okay.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=json><span class=giallo-l><span style=color:#6a737d>// Good pagination response</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "data"</span><span>: [</span><span style=color:#fdaeb7;font-style:italic>...</span><span>],</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "pagination"</span><span>: {</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "page"</span><span>:</span><span style=color:#79b8ff> 1</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "per_page"</span><span>:</span><span style=color:#79b8ff> 20</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "total_pages"</span><span>:</span><span style=color:#79b8ff> 50</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "total_items"</span><span>:</span><span style=color:#79b8ff> 1000</span></span>
+<span class=giallo-l><span>  },</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "links"</span><span>: {</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "self"</span><span>:</span><span style=color:#9ecbff> "/users?page=1"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "next"</span><span>:</span><span style=color:#9ecbff> "/users?page=2"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "last"</span><span>:</span><span style=color:#9ecbff> "/users?page=50"</span></span>
+<span class=giallo-l><span>  }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre><p>Pagination strategies:<ul><li><strong>Offset-based</strong> - Simple but can skip items if data changes<li><strong>Cursor-based</strong> - More reliable for real-time data<li><strong>Keyset</strong> - Best for large datasets</ul><h2 id=mistake-7-no-rate-limiting>Mistake 7: No Rate Limiting</h2><p>Without rate limiting, one misbehaving client can bring down your entire API.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=http><span class=giallo-l><span style=color:#f97583>HTTP</span><span>/</span><span style=color:#79b8ff>1.1 200</span><span style=color:#9ecbff> OK</span></span>
+<span class=giallo-l><span style=color:#85e89d>X-RateLimit-Limit</span><span style=color:#f97583>:</span><span style=color:#9ecbff> 1000</span></span>
+<span class=giallo-l><span style=color:#85e89d>X-RateLimit-Remaining</span><span style=color:#f97583>:</span><span style=color:#9ecbff> 999</span></span>
+<span class=giallo-l><span style=color:#85e89d>X-RateLimit-Reset</span><span style=color:#f97583>:</span><span style=color:#9ecbff> 1640995200</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>HTTP</span><span>/</span><span style=color:#79b8ff>1.1 429</span><span style=color:#9ecbff> Too Many Requests</span></span>
+<span class=giallo-l><span style=color:#85e89d>Retry-After</span><span style=color:#f97583>:</span><span style=color:#9ecbff> 60</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#79b8ff>  "error"</span><span>: {</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "code"</span><span>:</span><span style=color:#9ecbff> "RATE_LIMITED"</span><span>,</span></span>
+<span class=giallo-l><span style=color:#79b8ff>    "message"</span><span>:</span><span style=color:#9ecbff> "Rate limit exceeded. Try again in 60 seconds."</span></span>
+<span class=giallo-l><span>  }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre><p>Rate limiting protects:<ul><li>Your infrastructure from abuse<li>Fair usage across all clients<li>Your API from accidental infinite loops</ul><h2 id=bonus-document-everything>Bonus: Document Everything</h2><p>The best-designed API is useless if no one knows how to use it.<p>Use OpenAPI/Swagger to:<ul><li>Generate interactive documentation<li>Enable client SDK generation<li>Validate requests and responses<li>Keep docs in sync with code</ul><h2 id=conclusion>Conclusion</h2><p>Great API design is about empathy for the developers who will use your API. Every decision should make their lives easier, not harder.<p>Remember:<ul><li>Consistency is king<li>Errors are features, not afterthoughts<li>Plan for change from the start<li>When in doubt, follow REST conventions</ul><p>Your API is a product. Treat it like one.<hr><p><em>What API design patterns have you found most valuable? What mistakes would you add to this list?</em></div><footer class=article-footer><div class=article-tags><span>Tags:</span><a class=tag href=https://hownotto.dev/tags/anti-patterns/ rel=tag>anti-patterns</a><a class=tag href=https://hownotto.dev/tags/api-design/ rel=tag>api-design</a><a class=tag href=https://hownotto.dev/tags/rest/ rel=tag>rest</a><a class=tag href=https://hownotto.dev/tags/bad-architecture/ rel=tag>bad-architecture</a></div></footer><nav aria-label="Post navigation" class=article-navigation><a class=nav-prev href=https://hownotto.dev/blog/clean-code-principles/> <span class=nav-label>← Previous</span> <span class=nav-title>Dirty Code Anti-Patterns: What Bad Code Actually Looks Like</span> </a><a class=nav-next href=https://hownotto.dev/blog/docker-best-practices/> <span class=nav-label>Next →</span> <span class=nav-title>Docker Anti-Patterns: How Not to Build Production Containers</span> </a></nav></article></main><footer class=site-footer><div class=footer-content><p>© 2026 How Not To Dev. All rights reserved.<nav aria-label="Footer navigation" class=footer-links><a href=https://hownotto.dev/rss.xml>RSS</a></nav></div></footer><script>// Theme toggle with localStorage persistence
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme === 'dark');
+        } else {
+            setTheme(prefersDark.matches);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches);
+            }
+        });</script>

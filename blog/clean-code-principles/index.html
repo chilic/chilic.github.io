@@ -1,0 +1,113 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1.0" name=viewport><title>Dirty Code Anti-Patterns: What Bad Code Actually Looks Like | How Not To Dev</title><meta content="Dirty Code Anti-Patterns: What Bad Code Actually Looks Like | How Not To Dev" name=title><meta content="Exposing the most common dirty code anti-patterns — cryptic names, bloated functions, hidden side effects, and copy-paste disasters. Learn what not to do." name=description><meta content="How Not To Dev" name=author><meta content="index, follow" name=robots><link href=https://hownotto.dev/blog/clean-code-principles/ rel=canonical><meta content=article property=og:type><meta content=https://hownotto.dev/blog/clean-code-principles/ property=og:url><meta content="Dirty Code Anti-Patterns: What Bad Code Actually Looks Like" property=og:title><meta content="Exposing the most common dirty code anti-patterns — cryptic names, bloated functions, hidden side effects, and copy-paste disasters. Learn what not to do." property=og:description><meta content="How Not To Dev" property=og:site_name><meta content=en_US property=og:locale><meta content=summary_large_image name=twitter:card><meta content="Dirty Code Anti-Patterns: What Bad Code Actually Looks Like" name=twitter:title><meta content="Exposing the most common dirty code anti-patterns — cryptic names, bloated functions, hidden side effects, and copy-paste disasters. Learn what not to do." name=twitter:description><link title="RSS Feed" href=https://hownotto.dev/rss.xml rel=alternate type=application/rss+xml><link title="Atom Feed" href=https://hownotto.dev/atom.xml rel=alternate type=application/atom+xml><link href=/favicon.svg rel=icon type=image/svg+xml><link href=/apple-touch-icon.png rel=apple-touch-icon><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link href=https://hownotto.dev/style.css rel=stylesheet><script type=application/ld+json>
+[
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Dirty Code Anti-Patterns: What Bad Code Actually Looks Like",
+    "description": "Exposing the most common dirty code anti-patterns — cryptic names, bloated functions, hidden side effects, and copy-paste disasters. Learn what not to do.",
+    "datePublished": "2024-01-15T00:00:00+00:00",
+    "dateModified": "2024-01-15T00:00:00+00:00",
+    
+    "author": {
+        "@type": "Person",
+        "name": "How Not To Dev"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "How Not To Dev"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;clean-code-principles&#x2F;"
+    },
+    "keywords": "anti-patterns, dirty-code, code-smells, software-design"
+    
+},
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https:&#x2F;&#x2F;hownotto.dev"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://hownotto.dev/blog/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Dirty Code Anti-Patterns: What Bad Code Actually Looks Like",
+            "item": "https:&#x2F;&#x2F;hownotto.dev&#x2F;blog&#x2F;clean-code-principles&#x2F;"
+        }
+    ]
+}
+]
+</script><meta content=2024-01-15T00:00:00+00:00 property=article:published_time><meta content=2024-01-15T00:00:00+00:00 property=article:modified_time><meta content=anti-patterns property=article:tag><meta content=dirty-code property=article:tag><meta content=code-smells property=article:tag><meta content=software-design property=article:tag><body><a class=skip-link href=#main-content>Skip to main content</a><header class=site-header><nav aria-label="Main navigation" class=nav-container><a aria-label="How Not To Dev - Home" class=site-logo href=https://hownotto.dev> <span class=logo-text>How Not To Dev</span> </a><ul class=nav-links><li><a href=https://hownotto.dev/blog/>Blog</a><li><a href=https://hownotto.dev/about/>About</a><li><a href=https://hownotto.dev/tags>Tags</a><li><a aria-label="RSS Feed" href=https://hownotto.dev/rss.xml>RSS</a></ul><button aria-label="Toggle dark mode" class=theme-toggle id=theme-toggle><svg viewbox="0 0 24 24" class=sun-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5 /><line x1=12 x2=12 y1=1 y2=3 /><line x1=12 x2=12 y1=21 y2=23 /><line x1=4.22 x2=5.64 y1=4.22 y2=5.64 /><line x1=18.36 x2=19.78 y1=18.36 y2=19.78 /><line x1=1 x2=3 y1=12 y2=12 /><line x1=21 x2=23 y1=12 y2=12 /><line x1=4.22 x2=5.64 y1=19.78 y2=18.36 /><line x1=18.36 x2=19.78 y1=5.64 y2=4.22 /></svg> <svg viewbox="0 0 24 24" class=moon-icon fill=none height=20 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=20 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></nav></header><main id=main-content><article class=article itemscope itemtype=https://schema.org/Article><header class=article-header><div class=article-header-content><div class=article-categories><a href=https://hownotto.dev/categories/anti-patterns/>Anti-Patterns</a></div><h1 itemprop=headline>Dirty Code Anti-Patterns: What Bad Code Actually Looks Like</h1><p class=article-description itemprop=description>Exposing the most common dirty code anti-patterns — cryptic names, bloated functions, hidden side effects, and copy-paste disasters. Learn what not to do.<div class=article-meta><span class=author itemprop=author itemscope itemtype=https://schema.org/Person> <span itemprop=name>How Not To Dev</span> </span><time datetime=2024-01-15 itemprop=datePublished> January 15, 2024 </time><span class=reading-time>3 min read</span></div></div></header><aside class=table-of-contents><details open><summary>Table of Contents</summary> <nav aria-label="Table of contents"><ul><li><a href=https://hownotto.dev/blog/clean-code-principles/#why-clean-code-matters>Why Clean Code Matters</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#the-core-principles>The Core Principles</a> <ul><li><a href=https://hownotto.dev/blog/clean-code-principles/#1-meaningful-names>1. Meaningful Names</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#2-functions-should-do-one-thing>2. Functions Should Do One Thing</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#3-keep-functions-small>3. Keep Functions Small</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#4-avoid-side-effects>4. Avoid Side Effects</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#5-don-t-repeat-yourself-dry>5. Don’t Repeat Yourself (DRY)</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#6-comments-are-a-last-resort>6. Comments Are a Last Resort</a></ul><li><a href=https://hownotto.dev/blog/clean-code-principles/#practical-tips-for-writing-cleaner-code>Practical Tips for Writing Cleaner Code</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#the-boy-scout-rule>The Boy Scout Rule</a><li><a href=https://hownotto.dev/blog/clean-code-principles/#conclusion>Conclusion</a></ul></nav></details></aside><div class=article-content itemprop=articleBody><p>Writing clean code isn’t just about making your code work—it’s about making it understandable, maintainable, and a joy to work with. Here are the essential principles every developer should internalize.</p><span id=continue-reading></span><h2 id=why-clean-code-matters>Why Clean Code Matters</h2><p>Clean code is the foundation of sustainable software development. When code is clean, it’s:<ul><li><strong>Easier to understand</strong> - New team members can onboard faster<li><strong>Easier to modify</strong> - Changes require less effort and introduce fewer bugs<li><strong>Easier to test</strong> - Well-structured code is naturally more testable<li><strong>Less costly</strong> - Technical debt accumulates slower</ul><h2 id=the-core-principles>The Core Principles</h2><h3 id=1-meaningful-names>1. Meaningful Names</h3><p>Names should reveal intent. A variable name should tell you why it exists, what it does, and how it’s used.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=python><span class=giallo-l><span style=color:#6a737d># Bad</span></span>
+<span class=giallo-l><span>d</span><span style=color:#f97583> =</span><span style=color:#79b8ff> 86400</span><span style=color:#6a737d>  # elapsed time in seconds</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good</span></span>
+<span class=giallo-l><span style=color:#79b8ff>SECONDS_PER_DAY</span><span style=color:#f97583> =</span><span style=color:#79b8ff> 86400</span></span></code></pre><p>Choose names that are:<ul><li><strong>Pronounceable</strong> - You should be able to discuss them in conversation<li><strong>Searchable</strong> - Single-letter names are hard to find<li><strong>Consistent</strong> - Use the same concept throughout the codebase</ul><h3 id=2-functions-should-do-one-thing>2. Functions Should Do One Thing</h3><p>The Single Responsibility Principle (SRP) states that a function should have one, and only one, reason to change.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=python><span class=giallo-l><span style=color:#6a737d># Bad - does multiple things</span></span>
+<span class=giallo-l><span style=color:#f97583>def</span><span style=color:#b392f0> process_user_data</span><span>(user):</span></span>
+<span class=giallo-l><span>    validate_email(user.email)</span></span>
+<span class=giallo-l><span>    hash_password(user.password)</span></span>
+<span class=giallo-l><span>    save_to_database(user)</span></span>
+<span class=giallo-l><span>    send_welcome_email(user)</span></span>
+<span class=giallo-l><span>    log_user_creation(user)</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good - each function has one responsibility</span></span>
+<span class=giallo-l><span style=color:#f97583>def</span><span style=color:#b392f0> create_user</span><span>(user_data):</span></span>
+<span class=giallo-l><span>    user</span><span style=color:#f97583> =</span><span> validate_and_build_user(user_data)</span></span>
+<span class=giallo-l><span>    save_user(user)</span></span>
+<span class=giallo-l><span>    notify_user_created(user)</span></span></code></pre><h3 id=3-keep-functions-small>3. Keep Functions Small</h3><p>Functions should be small. How small? Smaller than that.<p>A good rule of thumb:<ul><li><strong>20 lines or less</strong> is a good target<li><strong>One level of abstraction</strong> per function<li><strong>One level of indentation</strong> where possible</ul><h3 id=4-avoid-side-effects>4. Avoid Side Effects</h3><p>Pure functions are easier to test and reason about. They take inputs and return outputs without modifying external state.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=python><span class=giallo-l><span style=color:#6a737d># Bad - side effect hidden in function name</span></span>
+<span class=giallo-l><span style=color:#f97583>def</span><span style=color:#b392f0> check_password</span><span>(password):</span></span>
+<span class=giallo-l><span style=color:#f97583>    if</span><span> is_valid(password):</span></span>
+<span class=giallo-l><span>        initialize_session()</span><span style=color:#6a737d>  # Unexpected side effect!</span></span>
+<span class=giallo-l><span style=color:#f97583>        return</span><span style=color:#79b8ff> True</span></span>
+<span class=giallo-l><span style=color:#f97583>    return</span><span style=color:#79b8ff> False</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good - explicit about what it does</span></span>
+<span class=giallo-l><span style=color:#f97583>def</span><span style=color:#b392f0> validate_password</span><span>(password):</span></span>
+<span class=giallo-l><span style=color:#f97583>    return</span><span> is_valid(password)</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#f97583>def</span><span style=color:#b392f0> create_authenticated_session</span><span>(user):</span></span>
+<span class=giallo-l><span style=color:#f97583>    if</span><span> validate_password(user.password):</span></span>
+<span class=giallo-l><span style=color:#f97583>        return</span><span> Session(user)</span></span>
+<span class=giallo-l><span style=color:#f97583>    raise</span><span> AuthenticationError()</span></span></code></pre><h3 id=5-don-t-repeat-yourself-dry>5. Don’t Repeat Yourself (DRY)</h3><p>Duplication is the root of all evil in software. Every piece of knowledge should have a single, unambiguous representation.<p>However, be careful not to DRY prematurely—wait until you see the pattern three times before abstracting.<h3 id=6-comments-are-a-last-resort>6. Comments Are a Last Resort</h3><p>Good code is self-documenting. Comments should explain <em>why</em>, not <em>what</em>.<pre class=giallo style=color:#e1e4e8;background-color:#24292e><code data-lang=python><span class=giallo-l><span style=color:#6a737d># Bad - explains what the code does</span></span>
+<span class=giallo-l><span style=color:#6a737d># Increment i by 1</span></span>
+<span class=giallo-l><span>i</span><span style=color:#f97583> +=</span><span style=color:#79b8ff> 1</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#6a737d># Good - explains why</span></span>
+<span class=giallo-l><span style=color:#6a737d># Compensate for zero-based indexing in user-facing display</span></span>
+<span class=giallo-l><span>display_index</span><span style=color:#f97583> =</span><span> internal_index</span><span style=color:#f97583> +</span><span style=color:#79b8ff> 1</span></span></code></pre><p>Valid reasons for comments:<ul><li>Legal requirements<li>Explaining intent behind non-obvious decisions<li>Warnings about consequences<li>TODO notes (but address them!)</ul><h2 id=practical-tips-for-writing-cleaner-code>Practical Tips for Writing Cleaner Code</h2><ol><li><strong>Write tests first</strong> - TDD naturally leads to cleaner, more modular code<li><strong>Refactor continuously</strong> - Clean up as you go, not in big batches<li><strong>Read more code</strong> - Study well-written open source projects<li><strong>Code review</strong> - Fresh eyes catch issues you’ve become blind to<li><strong>Take breaks</strong> - Tired developers write messy code</ol><h2 id=the-boy-scout-rule>The Boy Scout Rule</h2><blockquote><p>“Leave the campground cleaner than you found it.”</blockquote><p>Every time you touch code, leave it a little better than you found it. Small improvements compound over time.<h2 id=conclusion>Conclusion</h2><p>Clean code is not about perfection—it’s about professionalism. It’s about caring enough to do your job well and respecting your future self and teammates who will maintain this code.<p>Start applying these principles today, one small improvement at a time. Your future self will thank you.<hr><p><em>What clean code principles have had the biggest impact on your work? Share your thoughts in the comments below.</em></div><footer class=article-footer><div class=article-tags><span>Tags:</span><a class=tag href=https://hownotto.dev/tags/anti-patterns/ rel=tag>anti-patterns</a><a class=tag href=https://hownotto.dev/tags/dirty-code/ rel=tag>dirty-code</a><a class=tag href=https://hownotto.dev/tags/code-smells/ rel=tag>code-smells</a><a class=tag href=https://hownotto.dev/tags/software-design/ rel=tag>software-design</a></div></footer><nav aria-label="Post navigation" class=article-navigation><a class=nav-prev href=https://hownotto.dev/blog/why-not-use-int-in-c/> <span class=nav-label>← Previous</span> <span class=nav-title>Why You Should Never Use 'int' in Modern C</span> </a><a class=nav-next href=https://hownotto.dev/blog/api-design-mistakes/> <span class=nav-label>Next →</span> <span class=nav-title>7 API Design Anti-Patterns That Will Ruin Your Architecture</span> </a></nav></article></main><footer class=site-footer><div class=footer-content><p>© 2026 How Not To Dev. All rights reserved.<nav aria-label="Footer navigation" class=footer-links><a href=https://hownotto.dev/rss.xml>RSS</a></nav></div></footer><script>// Theme toggle with localStorage persistence
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme === 'dark');
+        } else {
+            setTheme(prefersDark.matches);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches);
+            }
+        });</script>

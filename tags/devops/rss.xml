@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>How Not To Dev - devops</title>
+      <link>https://hownotto.dev</link>
+      <description>Exposing anti-patterns, architectural mistakes, and badly written code — so you know what not to do.</description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://hownotto.dev/tags/devops/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Fri, 05 Jan 2024 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Docker Anti-Patterns: How Not to Build Production Containers</title>
+          <pubDate>Fri, 05 Jan 2024 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://hownotto.dev/blog/docker-best-practices/</link>
+          <guid>https://hownotto.dev/blog/docker-best-practices/</guid>
+          <description xml:base="https://hownotto.dev/blog/docker-best-practices/">&lt;p&gt;Docker has revolutionized how we build, ship, and run applications. But with great power comes great responsibility—poorly configured containers can lead to security vulnerabilities, bloated images, and production headaches. Here’s how to do Docker right.&lt;&#x2F;p&gt;</description>
+      </item>
+    </channel>
+</rss>

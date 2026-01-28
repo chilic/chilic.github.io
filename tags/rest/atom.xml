@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>How Not To Dev - rest</title>
+    <subtitle>Exposing anti-patterns, architectural mistakes, and badly written code — so you know what not to do.</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://hownotto.dev/tags/rest/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://hownotto.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-01-10T00:00:00+00:00</updated>
+    <id>https://hownotto.dev/tags/rest/atom.xml</id>
+    <entry xml:lang="en">
+        <title>7 API Design Anti-Patterns That Will Ruin Your Architecture</title>
+        <published>2024-01-10T00:00:00+00:00</published>
+        <updated>2024-01-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://hownotto.dev/blog/api-design-mistakes/"/>
+        <id>https://hownotto.dev/blog/api-design-mistakes/</id>
+        
+        <summary type="html">&lt;p&gt;A well-designed API is a joy to use. A poorly designed one? It’s a source of endless frustration, bugs, and wasted developer hours. Here are the most common API design mistakes I’ve encountered—and how to avoid them.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>
